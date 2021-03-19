@@ -1,3 +1,9 @@
+import game
+import api
+
 class Agent:
-    # minimax, symbol, heuristic    
-    pass
+    def __init__(self, id):
+        self.agent_id = id
+
+    def make_move():
+        

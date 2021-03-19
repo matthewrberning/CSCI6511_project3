@@ -6,6 +6,21 @@ class Game:
     # debug "what move? then print out board", otherwise, just play two agents
     # agent 1 is always us?
 
+    def play_game(self):
+        # while game not done (-1):
+        #   alternate moves of agents
+        # check get_game_state after each move - report win etc.
+
+        # main game loop
+        while self.get_game_state() == -1:
+            # while move is not made
+                # collect current board state compare to previous state
+                # if the same then sleep 30 seconds and stay in while
+                # if different break while loop - pass to agent
+     
+        
+        pass
+
     #NOTE: create function to check if its our turn! We can keep a list of activate games and loop
     # through the active ones
     def __init__(self, agent1, agent2, first_move=True, gameId=None) -> None:
@@ -26,24 +41,9 @@ class Game:
         # need to 
         else:
             self.gameId = gameId
-    
-    def play_game(self):
-        # while game not done (-1):
-        #   alternate moves of agents
-        # check get_game_state after each move - report win etc.
+        self.play_game()
 
-        # main game loop
-        while self.get_game_state() == -1:
-            pass
-        
-        
-        # while move is not made
-            # collect current board state compare to previous state
-            # if the same then sleep 30 seconds and stay in while
-            # if different break while loop - pass to agent
-     
-        
-        pass
+
     
     def get_game_state(self):
         """0 on agent 1 win, 1 on agent 2 win, 2 on tie, -1 on continuing"""
@@ -53,5 +53,7 @@ class Game:
         pass 
 
     # TODO: get turn
-    def my_turn(self):
-        pass
+    def get_turn(self):
+        if self.to_move == 0:
+            return self.agent1.agent_id
+        return self.agent2.agent_id

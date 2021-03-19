@@ -99,7 +99,9 @@ class Api:
         conn.request("GET", "/aip2pgaming/api/index.php?type=myGames", payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8")) 
+        data = data.decode("utf-8")
+        print(data)
+        return data
 
     def get_open_games(self):
         conn = http.client.HTTPSConnection("www.notexponential.com")
@@ -197,3 +199,6 @@ class Api:
         data = res.read()
         print(data.decode("utf-8"))
         return data.decode("utf-8")
+
+x = Api()
+x.get_games()
