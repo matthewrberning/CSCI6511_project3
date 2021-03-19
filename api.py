@@ -3,7 +3,7 @@ import mimetypes
 
 class Api:
     def __init__(self, f="api_key/key.json") -> None:
-        with open("api_key/key.json", "r") as f:
+        with open(f, "r") as f:
             api = json.loads(f.read())
 
         self.uid = api[0]['userId']
@@ -42,14 +42,14 @@ class Api:
         dataList.append('Content-Type: {}'.format('multipart/form-data'))
         dataList.append('')
 
-        dataList.append(self.tid)
+        dataList.append(str(self.tid))
         dataList.append('--' + boundary)
         dataList.append('Content-Disposition: form-data; name=teamId2;')
 
         dataList.append('Content-Type: {}'.format('multipart/form-data'))
         dataList.append('')
 
-        dataList.append(team2.tid)
+        dataList.append(str(team2.tid))
         dataList.append('--' + boundary)
         dataList.append('Content-Disposition: form-data; name=gameType;')
 
@@ -63,14 +63,14 @@ class Api:
         dataList.append('Content-Type: {}'.format('multipart/form-data'))
         dataList.append('')
 
-        dataList.append(size)
+        dataList.append(str(size))
         dataList.append('--' + boundary)
         dataList.append('Content-Disposition: form-data; name=target;')
 
         dataList.append('Content-Type: {}'.format('multipart/form-data'))
         dataList.append('')
 
-        dataList.append(target)
+        dataList.append(str(target))
         dataList.append('--'+boundary+'--')
         dataList.append('')
         body = '\r\n'.join(dataList)
@@ -155,7 +155,7 @@ class Api:
         data = res.read()
         print(data.decode("utf-8"))
 
-    def get_moves(self):
+    def get_moves(self, gameId, count):
         conn = http.client.HTTPSConnection("www.notexponential.com")
         boundary = ''
         payload = ''
@@ -164,31 +164,31 @@ class Api:
         'userId': self.uid,
         'Content-type': 'multipart/form-data; boundary={}'.format(boundary)
         }
-        conn.request("GET", "/aip2pgaming/api/index.php?type=moves&gameId=1577&count=1", payload, headers)
+        conn.request("GET", "/aip2pgaming/api/index.php?type=moves&gameId={}&count={}".format(gameId, count), payload, headers)
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
 
-    def get_board_string(self):
+    def get_board_string(self, gameId):
         conn = http.client.HTTPSConnection("www.notexponential.com")
         payload = ''
         headers = {
             'x-api-key': self.key,
             'userId': self.uid
         }
-        conn.request("GET", "/aip2pgaming/api/index.php?type=boardString&gameId=1577", payload, headers)
+        conn.request("GET", "/aip2pgaming/api/index.php?type=boardString&gameId={}".format(gameId), payload, headers)
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
 
-    def get_board_map(self):
+    def get_board_map(self, gameId):
         conn = http.client.HTTPSConnection("www.notexponential.com")
         payload = ''
         headers = {
             'x-api-key': self.key,
             'userId': self.uid
         }
-        conn.request("GET", "/aip2pgaming/api/index.php?type=boardMap&gameId=1577", payload, headers)
+        conn.request("GET", "/aip2pgaming/api/index.php?type=boardMap&gameId={}".format(gameId), payload, headers)
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
