@@ -1,6 +1,7 @@
 import http.client, json
 import mimetypes
 
+
 class Api:
     def __init__(self, f="api_key/key.json") -> None:
         with open(f, "r") as f:
@@ -16,7 +17,7 @@ class Api:
         
         conn = http.client.HTTPSConnection("www.notexponential.com")
         payload = ''
-        headers = {
+        headerst = {
             'x-api-key': self.key,
             'userId': self.uid
         }
@@ -84,6 +85,9 @@ class Api:
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
+
+        ret = json.loads(data.decode("utf-8"))['gameId']
+        return ret
 
     def get_games(self):
         conn = http.client.HTTPSConnection("www.notexponential.com")
@@ -192,3 +196,4 @@ class Api:
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
+        return data.decode("utf-8")
