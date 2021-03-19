@@ -7,9 +7,9 @@ class Api:
         with open(f, "r") as f:
             api = json.loads(f.read())
 
-        self.uid = api[0]['userId']
+        self.uid = api[0]["userId"]
         self.key = api[0]["x-api-key"]
-        self.tid = api[1]['teamId']
+        self.tid = api[1]["teamId"]
 
 
     def team_members(self):
@@ -17,7 +17,7 @@ class Api:
         
         conn = http.client.HTTPSConnection("www.notexponential.com")
         payload = ''
-        headerst = {
+        headers = {
             'x-api-key': self.key,
             'userId': self.uid
         }
