@@ -31,7 +31,7 @@ class Game:
 
         # game not created
         if not gameId:
-            us.create_game(opp_tid, size, target)
+            self.gameId = us.create_game(opp_tid, size, target)
             self.size, self.target = size, target
         # game created
         else:
