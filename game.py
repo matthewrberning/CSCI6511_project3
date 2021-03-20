@@ -1,24 +1,25 @@
-from api import Api 
+from api import Api
 import numpy as np
-
 
 class Board:
     def __init__(self, size, target) -> None:
         self.total_spaces = size**2
-        self.free_spaces = 0
 
-        self.board =  np.zeros( (size, size), dtype=np.uint8 )
+        self.board =  np.zeros( (size, size), dtype=np.int8 )
     
     def get_open_spaces(self):
         """Return the possible next moves""" 
         return np.argwhere(self.board == 0)
 
     def isFull(self):
-        return True if (self.total_spaces - self.free_spaces) == 0 else False
+        return True if np.count_nonzero(self.board) == self.total_spaces else False
 
     def add_symbol(self, point, symbol):
         """point is a int tuple (x,y), symbol 1 or 0"""
         self.board[point[0]][point[1]] = symbol
+
+    def remove_symbol(self, point):
+        self.board[point[0]][point[1]] = 0
 
     def check_win_con(self, point):
         """Check if the board at that point(most recent move) has won"""
