@@ -1,4 +1,3 @@
-from game import Board
 def minimax(board, depth, maximizer, point=None):
     """
     minimax algorithm to find most optimal move in a game of TTT.
