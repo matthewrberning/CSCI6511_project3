@@ -25,6 +25,9 @@ class Board:
         """Check if the board at that point(most recent move) has won"""
         pass
 
+    def __str__(self) -> str:
+        return str(self.board)
+
 class Game:
     def __init__(self, us, opp_tid, size=3, target=3,first_move=True, gameId=None) -> None:
         self.us = us
