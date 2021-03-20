@@ -87,6 +87,7 @@ class Api:
         print(data.decode("utf-8"))
 
         ret = json.loads(data.decode("utf-8"))['gameId']
+        return ret
 
     def get_games(self):
         conn = http.client.HTTPSConnection("www.notexponential.com")
