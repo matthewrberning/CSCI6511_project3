@@ -1,11 +1,46 @@
 from api import Api 
+import numpy as np
+
+
+class Board:
+    def __init__(self, size, target) -> None:
+        self.total_spaces = size**2
+        self.free_spaces = 0
+
+        self.board =  np.zeros( (size, size), dtype=np.uint8 )
+    
+    def get_open_spaces(self):
+        """Return the possible next moves""" 
+        return np.argwhere(self.board == 0)
+
+    def isFull(self):
+        return True if (self.total_spaces - self.free_spaces) == 0 else False
+
+    def add_symbol(self, point, symbol):
+        """point is a int tuple (x,y), symbol 1 or 0"""
+        self.board[point[0]][point[1]] = symbol
+
+    def check_win_con(self, point):
+        """Check if the board at that point(most recent move) has won"""
+        pass
 
 class Game:
-    # keep track of game state, test win cons, board full etc
-    # Game.run 
-    # debug "what move? then print out board", otherwise, just play two agents
-    # agent 1 is always us?
+    def __init__(self, us, opp_tid, size=3, target=3,first_move=True, gameId=None) -> None:
+        self.us = us
 
+
+        # game not created
+        if not gameId:
+            us.create_game(opp_tid, size, target)
+            self.size, self.target = size, target
+        # game created
+        else:
+            self.size, self.target = self.get_game_params(gameId)
+        
+        self.board = Board(self.size, self.target)
+        
+        
+        
     def play_game(self):
         # while game not done (-1):
         #   alternate moves of agents
@@ -17,43 +52,32 @@ class Game:
                 # collect current board state compare to previous state
                 # if the same then sleep 30 seconds and stay in while
                 # if different break while loop - pass to agent
-     
+            pass
         
-        pass
 
-    #NOTE: create function to check if its our turn! We can keep a list of activate games and loop
-    # through the active ones
-    def __init__(self, agent1, agent2, first_move=True, gameId=None) -> None:
-        self.agent1 = agent1
-        self.agent2 = agent2
+    def get_game_params(self, gameId):
+        b = self.us.get_board_string(gameId)
 
-        # 0 agent 1 moves, 1 agent 2 moves
-        if first_move:
-            self.to_move = 0
-        else:
-            self.to_move = 1
-        
-        # game has not been created
-        if gameId == None:
-            # this can be either way, no difference
-            self.gameId = agent1.create_game(agent2.tid)
-            print("Current game id: {}".format(self.gameId))
-        # need to 
-        else:
-            self.gameId = gameId
-        self.play_game()
+        one_row = b['output'].split("\n")
+        t = int(b['target'])
+        return len(one_row[0]), t
 
 
     
-    def get_game_state(self):
-        """0 on agent 1 win, 1 on agent 2 win, 2 on tie, -1 on continuing"""
+    def get_game_state(self, last_to_move, point):
+        """
+        0 on agent 1 win, 1 on agent 2 win, 2 on tie, -1 on continuing. Only have to check the last move!
+        last_to_move is the agent that last played, using the enumeration above. So, on a win, return the agent 
+        identifier, otherwise check for a tie, or keep playing
+        """
         # request board state
         # use opposite player !self.to_move...
+        
+        if self.board.check_win_con(point):
+            return last_to_move
+        elif self.board.isFull():
+            return 2
+        return -1
+    
+    
 
-        pass 
-
-    # TODO: get turn
-    def get_turn(self):
-        if self.to_move == 0:
-            return self.agent1.agent_id
-        return self.agent2.agent_id

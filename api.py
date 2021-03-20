@@ -50,7 +50,7 @@ class Api:
         dataList.append('Content-Type: {}'.format('multipart/form-data'))
         dataList.append('')
 
-        dataList.append(str(team2.tid))
+        dataList.append(str(team2))
         dataList.append('--' + boundary)
         dataList.append('Content-Disposition: form-data; name=gameType;')
 
@@ -87,7 +87,6 @@ class Api:
         print(data.decode("utf-8"))
 
         ret = json.loads(data.decode("utf-8"))['gameId']
-        return ret
 
     def get_games(self):
         conn = http.client.HTTPSConnection("www.notexponential.com")
@@ -187,6 +186,9 @@ class Api:
         data = res.read()
         print(data.decode("utf-8"))
 
+        ret = json.loads(data.decode("utf-8"))
+        return ret
+
     def get_board_map(self, gameId):
         conn = http.client.HTTPSConnection("www.notexponential.com")
         payload = ''
@@ -199,6 +201,3 @@ class Api:
         data = res.read()
         print(data.decode("utf-8"))
         return data.decode("utf-8")
-
-x = Api()
-x.get_games()
