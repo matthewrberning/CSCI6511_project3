@@ -1,3 +1,5 @@
+from game import Board
+
 c = 0
 def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float("inf")):
     """
@@ -12,12 +14,12 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
 
     # max depth reached, or the board is filled up
     if depth == 0 or board.isFull():
-        return heuristic(point), point
+        return heuristic(board, point), point
 
     # add the tentative point to the board(currently just used to close off spaces)
     # but can be encorporated into a heuristic based on which agent has chosen a space
-    if point: # on all other calls
-        board.add_symbol( (point[0], point[1]), 1 if maximizer else -1 )
+    if point: # on all other calls    
+        board.add_symbol( (point[0], point[1]), 1 if maximizer else -1)
     else: # first call
         point = (0,0)
 
@@ -50,7 +52,7 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
         return value, point
 
 
-def heuristic(point: tuple):
+def heuristic(board: Board, point: tuple):
     return point[0] + point[1]
 
 
@@ -67,11 +69,11 @@ def my_min(value1, value2, point1, point2):
         return value1, point1
 
 # test code :)'
-# from game import Board
-# b = Board(100,100)
-# symbol = 1
-# while not b.isFull():
-#     b.add_symbol(minimax(b, 2, True)[1], 1 if symbol else -1)
-#     symbol = not symbol 
-#     print(b)
-# print(c)
+n = 10
+b = Board(n,n)
+symbol = 1
+while not b.isFull():
+    b.add_symbol(minimax(b, 2, True)[1], 1 if symbol else -1)
+    symbol = not symbol 
+    print(b)
+print(c)
