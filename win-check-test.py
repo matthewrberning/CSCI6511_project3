@@ -78,7 +78,7 @@ def get_game_state(board, target, coords):
         start_space[1] += 1
 
     # check for diagonal win, positive slope
-    print("checking for diagonal, positive slope")
+    # print("checking for diagonal, positive slope")
     start_space = [coords[0]+(target-1), coords[1]-(target-1)]
     for i in range(target):
         #print("start space:", start_space)
@@ -164,8 +164,22 @@ else:
     print("Test 7: FAILED")
 # Test 8: 5x5 board, small target, game won, diagonal, negative slope
 board = np.zeros((5, 5))
+board[1, 1] = 1
+board[2, 2] = 1
+board[3, 3] = 1
+if (get_game_state(board, 3, [2, 2]) == True):
+    print("Test 8: PASSED")
+else:
+    print("Test 8: FAILED")
 # Test 9: 5x5 board, small target, game won, diagonal, positive slope
 board = np.zeros((5, 5))
+board[3, 1] = 1
+board[2, 2] = 1
+board[1, 3] = 1
+if (get_game_state(board, 3, [2, 2]) == True):
+    print("Test 9: PASSED")
+else:
+    print("Test 9: FAILED")
 # Test 10: 5x5 board, small target, game ALMOST won, horizontal on top edge
 board = np.zeros((5, 5))
 board[1, 0] = 1
@@ -216,36 +230,197 @@ else:
     print("Test 15: FAILED")
 # Test 16: 5x5 board, small target, game ALMOST won, diagonal, negative slope
 board = np.zeros((5, 5))
+board[1, 1] = 1
+board[3, 3] = 1
+if (get_game_state(board, 3, [1, 1]) == False):
+    print("Test 16: PASSED")
+else:
+    print("Test 16: FAILED")
 # Test 17: 5x5 board, small target, game ALMOST won, diagonal, positive slope
 board = np.zeros((5, 5))
-
-
-
-
-# Test 18: 5x5 board, full target, game won, horizontal on top edge
-# Test 19: 5x5 board, full target, game won, horizontal on bottom edge
-# Test 20: 5x5 board, full target, game won, horizontal in center
-# Test 21: 5x5 board, full target, game won, vertical on left edge
-# Test 22: 5x5 board, full target, game won, vertical on right edge
-# Test 23: 5x5 board, full target, game won, vertical in center
-# Test 24: 5x5 board, full target, game won, diagonal, negative slope
-# Test 25: 5x5 board, full target, game won, diagonal, positive slope
-# Test 26: 5x5 board, full target, game ALMOST won, horizontal on top edge
-# Test 27: 5x5 board, full target, game ALMOST won, horizontal on bottom edge
-# Test 28: 5x5 board, full target, game ALMOST won, horizontal in center
-# Test 29: 5x5 board, full target, game ALMOST won, vertical on left edge
-# Test 30: 5x5 board, full target, game ALMOST won, vertical on right edge
-# Test 31: 5x5 board, full target, game ALMOST won, vertical in center
-# Test 32: 5x5 board, full target, game ALMOST won, diagonal, negative slope
-# Test 33: 5x5 board, full target, game ALMOST won, diagonal, positive slope
-
-board = np.zeros((5, 5))
-print(len(board))
-board[4, 4] = 1
 board[3, 1] = 1
 board[1, 3] = 1
+if (get_game_state(board, 3, [3, 1]) == False):
+    print("Test 17: PASSED")
+else:
+    print("Test 17: FAILED")
+# Test 18: 5x5 board, full target, game won, horizontal on top edge
+board = np.zeros((5, 5))
+board[0, 0] = 1
+board[1, 0] = 1
+board[2, 0] = 1
+board[3, 0] = 1
+board[4, 0] = 1
+if (get_game_state(board, 5, [1, 0]) == True):
+    print("Test 18: PASSED")
+else:
+    print("Test 18: FAILED")
+# Test 19: 5x5 board, full target, game won, horizontal on bottom edge
+board = np.zeros((5, 5))
+board[0, 4] = 1
+board[1, 4] = 1
+board[2, 4] = 1
+board[3, 4] = 1
+board[4, 4] = 1
+if (get_game_state(board, 5, [4, 4]) == True):
+    print("Test 19: PASSED")
+else:
+    print("Test 19: FAILED")
+# Test 20: 5x5 board, full target, game won, horizontal in center
+board = np.zeros((5, 5))
+board[0, 2] = 1
+board[1, 2] = 1
 board[2, 2] = 1
-print(board)
+board[3, 2] = 1
+board[4, 2] = 1
+if (get_game_state(board, 5, [2, 2]) == True):
+    print("Test 20: PASSED")
+else:
+    print("Test 20: FAILED")
+# Test 21: 5x5 board, full target, game won, vertical on left edge
+board = np.zeros((5, 5))
+board[0, 0] = 1
+board[0, 1] = 1
+board[0, 2] = 1
+board[0, 3] = 1
+board[0, 4] = 1
+if (get_game_state(board, 5, [0, 2]) == True):
+    print("Test 21: PASSED")
+else:
+    print("Test 21: FAILED")
+# Test 22: 5x5 board, full target, game won, vertical on right edge
+board = np.zeros((5, 5))
+board[4, 0] = 1
+board[4, 1] = 1
+board[4, 2] = 1
+board[4, 3] = 1
+board[4, 4] = 1
+if (get_game_state(board, 5, [4, 2]) == True):
+    print("Test 22: PASSED")
+else:
+    print("Test 22: FAILED")
+# Test 23: 5x5 board, full target, game won, vertical in center
+board = np.zeros((5, 5))
+board[2, 0] = 1
+board[2, 1] = 1
+board[2, 2] = 1
+board[2, 3] = 1
+board[2, 4] = 1
+if (get_game_state(board, 5, [2, 2]) == True):
+    print("Test 21: PASSED")
+else:
+    print("Test 21: FAILED")
+# Test 24: 5x5 board, full target, game won, diagonal, negative slope
+board = np.zeros((5, 5))
+board[0, 0] = 1
+board[1, 1] = 1
+board[2, 2] = 1
+board[3, 3] = 1
+board[4, 4] = 1
+if (get_game_state(board, 5, [2, 2]) == True):
+    print("Test 24: PASSED")
+else:
+    print("Test 24: FAILED")
+# Test 25: 5x5 board, full target, game won, diagonal, positive slope
+board = np.zeros((5, 5))
+board[4, 0] = 1
+board[3, 1] = 1
+board[2, 2] = 1
+board[1, 3] = 1
+board[0, 4] = 1
+if (get_game_state(board, 5, [2, 2]) == True):
+    print("Test 25: PASSED")
+else:
+    print("Test 25: FAILED")
+# Test 26: 5x5 board, full target, game ALMOST won, horizontal on top edge
+board = np.zeros((5, 5))
+board[0, 0] = 1
+board[1, 0] = 1
+board[2, 0] = 1
+board[3, 0] = 1
+board[4, 0] = 1
+if (get_game_state(board, 5, [0, 0]) == True):
+    print("Test 26: PASSED")
+else:
+    print("Test 26: FAILED")
+# Test 27: 5x5 board, full target, game ALMOST won, horizontal on bottom edge
+board = np.zeros((5, 5))
+board[1, 4] = 1
+board[2, 4] = 1
+board[3, 4] = 1
+board[4, 4] = 1
+if (get_game_state(board, 5, [4, 4]) == False):
+    print("Test 27: PASSED")
+else:
+    print("Test 27: FAILED")
+# Test 28: 5x5 board, full target, game ALMOST won, horizontal in center
+board = np.zeros((5, 5))
+board[0, 2] = 1
+board[2, 2] = 1
+board[3, 2] = 1
+board[4, 2] = 1
+if (get_game_state(board, 5, [2, 2]) == False):
+    print("Test 28: PASSED")
+else:
+    print("Test 28: FAILED")
+# Test 29: 5x5 board, full target, game ALMOST won, vertical on left edge
+board = np.zeros((5, 5))
+board[0, 0] = 1
+board[0, 2] = 1
+board[0, 3] = 1
+board[0, 4] = 1
+if (get_game_state(board, 5, [0, 2]) == False):
+    print("Test 29: PASSED")
+else:
+    print("Test 29: FAILED")
+# Test 30: 5x5 board, full target, game ALMOST won, vertical on right edge
+board = np.zeros((5, 5))
+board[4, 0] = 1
+board[4, 1] = 1
+board[4, 2] = 1
+board[4, 4] = 1
+if (get_game_state(board, 5, [4, 4]) == False):
+    print("Test 22: PASSED")
+else:
+    print("Test 22: FAILED")
+# Test 31: 5x5 board, full target, game ALMOST won, vertical in center
+board = np.zeros((5, 5))
+board[2, 1] = 1
+board[2, 2] = 1
+board[2, 3] = 1
+board[2, 4] = 1
+if (get_game_state(board, 5, [2, 2]) == False):
+    print("Test 31: PASSED")
+else:
+    print("Test 31: FAILED")
+# Test 32: 5x5 board, full target, game ALMOST won, diagonal, negative slope
+board = np.zeros((5, 5))
+board[0, 0] = 1
+board[1, 1] = 1
+board[3, 3] = 1
+board[4, 4] = 1
+if (get_game_state(board, 5, [1, 1]) == False):
+    print("Test 32: PASSED")
+else:
+    print("Test 32: FAILED")
+# Test 33: 5x5 board, full target, game ALMOST won, diagonal, positive slope
+board = np.zeros((5, 5))
+board[4, 0] = 1
+board[3, 1] = 1
+board[2, 2] = 1
+board[0, 4] = 1
+if (get_game_state(board, 5, [2, 2]) == False):
+    print("Test 33: PASSED")
+else:
+    print("Test 33: FAILED")
 
-#checking for vertical wins
-print(get_game_state(board, 3, [2, 2]))
+# board = np.zeros((5, 5))
+# print(len(board))
+# board[4, 4] = 1
+# board[3, 1] = 1
+# board[1, 3] = 1
+# board[2, 2] = 1
+# print(board)
+
+# #checking for vertical wins
+# print(get_game_state(board, 3, [2, 2]))
