@@ -7,7 +7,7 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
     board- the game board you are playing on
     depth- depth limited recursion
     maximizer- if it is the maximizers turn
-    point- should be none on initial call
+    point- should be none on initial call. the tentative point to add to the board
     """
     global c
     c+=1
@@ -30,7 +30,6 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
     if maximizer:
         value = float("-inf")
         for child in children:
-            # value = int( max( value, minimax( board, depth - 1, not maximizer, (child[0], child[1]) ) ) )
             value, point = my_max( value, minimax( board, depth - 1, not maximizer, (child[0], child[1]), alpha, beta )[0], point, tuple(child) )
             alpha = max(value, alpha)
             board.remove_symbol( (child[0], child[1]) )
@@ -42,7 +41,6 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
     else:
         value = float("inf")
         for child in children:
-            # value = int( min( value, minimax( board, depth - 1, not maximizer, (child[0], child[1]) ) ) )
             value, point = my_min( value, minimax( board, depth - 1, not maximizer, (child[0], child[1]),alpha, beta )[0], point, tuple(child) )
             beta = min(value, beta)
             board.remove_symbol( (child[0], child[1]) )
