@@ -87,6 +87,7 @@ class Api:
         print(data.decode("utf-8"))
 
         ret = json.loads(data.decode("utf-8"))['gameId']
+        return ret
 
     def get_games(self):
         conn = http.client.HTTPSConnection("www.notexponential.com")
@@ -131,7 +132,7 @@ class Api:
         dataList.append('Content-Type: {}'.format('multipart/form-data'))
         dataList.append('')
 
-        dataList.append(gameId)
+        dataList.append(str(gameId))
         dataList.append('--' + boundary)
         dataList.append('Content-Disposition: form-data; name=teamId;')
 
@@ -173,6 +174,7 @@ class Api:
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
+        return data.decode("utf-8")
 
     def get_board_string(self, gameId):
         conn = http.client.HTTPSConnection("www.notexponential.com")
@@ -184,7 +186,7 @@ class Api:
         conn.request("GET", "/aip2pgaming/api/index.php?type=boardString&gameId={}".format(gameId), payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+        # print(data.decode("utf-8"))
 
         ret = json.loads(data.decode("utf-8"))
         return ret
@@ -199,5 +201,5 @@ class Api:
         conn.request("GET", "/aip2pgaming/api/index.php?type=boardMap&gameId={}".format(gameId), payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+        # print(data.decode("utf-8"))
         return data.decode("utf-8")
