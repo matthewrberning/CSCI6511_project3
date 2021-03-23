@@ -1,6 +1,7 @@
 from api import Api
 import numpy as np
 from random import randrange
+import math
 import json
 import time
 
@@ -9,6 +10,7 @@ class Board:
         self.total_spaces = size**2
         self.dim = size
         self.target = target
+        self.middle_point = math.floor(size / 2)
         self.board =  np.zeros( (size, size), dtype=np.int8 )
     
     def get_open_spaces(self):
@@ -17,6 +19,9 @@ class Board:
 
     def isFull(self):
         return True if np.count_nonzero(self.board) == self.total_spaces else False
+
+    def isEmpty(self):
+        return True if np.count_nonzero(self.board) == 0 else False
 
     def add_symbol(self, point, symbol):
         """point is a int tuple (x,y), symbol 1 or 0"""

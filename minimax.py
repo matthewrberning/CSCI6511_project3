@@ -12,16 +12,16 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
     global c
     c+=1
 
+    if board.isEmpty():
+        return float("inf"), (board.middle_point, board.middle_point)
     
-
     # add the tentative point to the board(currently just used to close off spaces)
     # but can be encorporated into a heuristic based on which agent has chosen a space
     if point: # on all other calls    
         board.add_symbol( (point[0], point[1]), 1 if maximizer else -1)
     else: # first call
         point = (0,0)
-
-    
+        
     # max depth reached, or the board is filled up
     if depth == 0 or board.isFull():
         return heuristic(board, point), point
