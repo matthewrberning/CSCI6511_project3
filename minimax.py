@@ -12,7 +12,7 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
     global c
     c+=1
 
-    if board.isEmpty():
+    if board.isEmpty() or board.board[board.middle_point][board.middle_point]:
         return float("inf"), (board.middle_point, board.middle_point)
     
     # add the tentative point to the board(currently just used to close off spaces)
