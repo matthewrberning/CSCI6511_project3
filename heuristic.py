@@ -6,9 +6,10 @@ from game import Board
 # @param board: numpy array representing board, represented asa square np arr
 # @param target: the length of the winning line
 # @param coords: the coordinates of the most recently placed mark, represented as a 1x2 np arr
-def get_game_state(board, target, coords):
+def heuristic(board, target, coords):
     # use the coords of the last turn to determine if we are looking for 1 or -1
     ans = 0
+    board = board.board
     if (board[coords[0], coords[1]] == 1):
         ans = 1
     elif (board[coords[0], coords[1]] == -1):
