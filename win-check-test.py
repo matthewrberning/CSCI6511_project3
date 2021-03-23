@@ -17,8 +17,6 @@ def get_game_state(board, target, coords):
         exit()
 
     # check for vertical win
-    #print("checking for vertical")
-    found = False
     start_space = [coords[0]-(target-1), coords[1]]
     for i in range(target):
         if start_space[0] >= 0 and start_space[0] <= coords[0]:
@@ -31,16 +29,11 @@ def get_game_state(board, target, coords):
                 temp_found = False
             if (temp_found):
                 return True
-                #found = True
-                #print("found at", start_space)
-                #break
         start_space[0] += 1
 
     # check for horizontal win
-    #print("checking for horizontal")
     start_space = [coords[0], coords[1]-(target-1)]
     for i in range(target):
-        #print("start space:", start_space)
         if start_space[1] >= 0 and start_space[1] <= coords[1]:
             temp_found = True
             if (start_space[1]+(target-1) < len(board)):
@@ -51,16 +44,11 @@ def get_game_state(board, target, coords):
                 temp_found = False
             if (temp_found):
                 return True
-                #found = True
-                #print("found at", start_space)
-                #break
         start_space[1] += 1
     
     # check for diagonal win, negative slope
-    #print("checking for diagonal, negative slope")
     start_space = [coords[0]-(target-1), coords[1]-(target-1)]
     for i in range(target):
-        #print("start space:", start_space)
         if start_space[0] >= 0 and start_space[0] <= coords[0] and start_space[1] >= 0 and start_space[1] <= coords[1]:
             temp_found = True
             if (start_space[0]+(target-1) < len(board) and start_space[1]+(target-1) < len(board)):
@@ -71,24 +59,16 @@ def get_game_state(board, target, coords):
                 temp_found = False
             if (temp_found):
                 return True
-                #found = True
-                #print("found at", start_space)
-                #break
         start_space[0] += 1
         start_space[1] += 1
 
     # check for diagonal win, positive slope
-    # print("checking for diagonal, positive slope")
     start_space = [coords[0]+(target-1), coords[1]-(target-1)]
     for i in range(target):
-        #print("start space:", start_space)
         if start_space[0] < len(board) and start_space[0] >= coords[0] and start_space[1] >= 0 and start_space[1] <= coords[1]:
             temp_found = True
-            #print("reach:", start_space[0]-(target-1), ",", start_space[1]+(target-1))
             if (start_space[0]-(target-1) >= 0 and start_space[1]+(target-1) < len(board)):
-                #print("Entered")
                 for j in range(target):
-                    #print("curr space = ", start_space[0]-j, ",", start_space[1]+j)
                     if board[start_space[0]-j, start_space[1]+j] != ans:
                         temp_found = False
             else: 
