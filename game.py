@@ -7,7 +7,7 @@ import time
 class Board:
     def __init__(self, size, target) -> None:
         self.total_spaces = size**2
-
+        self.dim = size
         self.board =  np.zeros( (size, size), dtype=np.int8 )
     
     def get_open_spaces(self):
