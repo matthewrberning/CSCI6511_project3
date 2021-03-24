@@ -11,7 +11,8 @@ class Board:
         self.dim = size
         self.target = target
         self.middle_point = math.floor(size / 2)
-        self.board =  np.zeros( (size, size), dtype=np.int8 )
+        self.board = np.zeros( (size, size), dtype=np.int8 )
+        self.valm =  np.zeros( (size, size, 8), dtype=np.int8 ) # used to keep track of the value of each space for the heuristic
     
     def get_open_spaces(self):
         """Return the possible next moves""" 
