@@ -80,7 +80,6 @@ board[3, 1] = 1
 board[1, 3] = 1
 board[2, 2] = 1
 board[0, 4] = 1
-board[4, 0] = 1
 print(board)
 
 #checking for vertical wins
