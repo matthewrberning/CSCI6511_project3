@@ -11,11 +11,6 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
     """
     global c
     c+=1
-
-    print("maximizer is", maximizer)
-
-    if board.isEmpty() or board.board[board.middle_point][board.middle_point] == 0:
-        return float("inf"), (board.middle_point, board.middle_point)
     
     # add the tentative point to the board(currently just used to close off spaces)
     # but can be encorporated into a heuristic based on which agent has chosen a space
@@ -266,21 +261,21 @@ def my_min(value1, value2, point1, point2):
         return value1, point1
 
 # test code :)'
-n = 5
-t = 3
-b = Board(n,t)
-symbol = 1
-its = 0
-while 1:
-    its += 1
-    last_point = minimax(b, 1, True)[1]
-    b.add_symbol(last_point, 1 if symbol else -1)
+# n = 3
+# t = 3
+# b = Board(n,t)
+# symbol = 1
+# its = 0
+# while 1:
+#     its += 1
+#     last_point = minimax(b, 1, True)[1]
+#     b.add_symbol(last_point, 1 if symbol else -1)
 
-    if b.check_win_con(last_point):
-        print(b)
+#     if b.check_win_con(last_point):
+#         print(b)
 
-        break
-    symbol = not symbol 
-    print(b)
-    input("less gooooo")
-print(c, its)
+#         break
+#     symbol = not symbol 
+#     print(b)
+#     input("less gooooo")
+# print(c, its)

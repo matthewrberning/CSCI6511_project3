@@ -280,9 +280,10 @@ def heuristic(board, target, coords):
     #################################
     #################################
 
-size = 4
+size = 3
 t = 3
 b = Board(size, t)
+from minimax import minimax
 while 1:
     print(b.board)
     # human turn
@@ -306,7 +307,9 @@ while 1:
                     best = [i, j]
                     curr_max = v
                 b.board[i][j] = 0
-    b.board[best[0], best[1]] = 1
-    if (check_win_con(best, b.board, t)):
+    # b.board[best[0], best[1]] = 1
+    _, point = minimax(b, 1, True)
+    b.add_symbol(point, 1)
+    if (check_win_con(point, b.board, t)):
         break
 print(b.board)
