@@ -55,6 +55,7 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
 # 0 on agent 1 win, 1 on agent 2 win, 2 on tie, -1 on continuing
 # agent 1 will be represented by 1's, agent 2 will be -1's
 # @param coords: the coordinates of the most recently placed mark, represented as a 1x2 np arr
+# random comment
 def heuristic(board_obj, coords):
     # use the coords of the last turn to determine if we are looking for 1 or -1
     ans = 0
