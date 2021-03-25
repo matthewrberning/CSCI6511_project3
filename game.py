@@ -5,7 +5,7 @@ import json
 import time
 from minimax import minimax
 from board import Board
-from win_check_test import get_game_state
+
 
 class Game:
     def __init__(self, our_agent, opponent, size=3, target=3, first_move=True, gameId=None) -> None:
@@ -164,6 +164,9 @@ class Game:
 
 
     def display_board(self, agent, gameId):
+        '''
+        display the board
+        '''
 
         for line in agent.get_board_string(gameId)["output"].split("\n"):
             if line != '':
@@ -175,10 +178,6 @@ class Game:
                 print(line_map)
             else:
                 continue
-        # show the board
-        # list who is who (X or O)
-        # list total number of moves made, list total empty spaces
-        pass
 
     def get_move_user(self):    
         #ask user for input, send to api
@@ -210,7 +209,7 @@ class Game:
 
         status = 0
         while status == 0:
-            move = minimax(self.board, 6, True)[1]
+            move = minimax(self.board, 4, True)[1]
             print("minimax move: ", move)
             d = dict(json.loads(self.our_agent.make_move(self.gameId, move)))
 
