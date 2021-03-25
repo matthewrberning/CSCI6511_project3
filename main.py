@@ -4,7 +4,7 @@ from api import Api
 
 def main():
 
-	game_type = str(input("\nstart a 'n'ew interactive game?\n'c'ontinue an interactive game? \n'l'isten for games?\n'o'pen a game with another team?\n(default is new interactive game)\n") or "n")
+	game_type = str(input("\nstart a 'n'ew interactive game?\n'c'ontinue an interactive game? \n'l'isten for games?\n'o'pen a game with another team?\n'j'oin an open game?\n(default is new interactive game)\n") or "n")
 
 	if game_type == "n":
 
@@ -36,21 +36,31 @@ def main():
 	elif game_type == "o":
 
 		agent = Api()
-		user = int(input("other team's ID? (default is 1267)\nteamId: ") or "1267")
+		opponent = int(input("other team's ID? (default is 1267)\nteamId: ") or "1267")
 
 		board_size = int(input("board size? (default is 3)\nsize: ") or "3")
 		
 		target_size = int(input("how many to win? (must be less than or equal to board size -default is 3)\ntarget: ") or "3")
 
-		game = Game(agent, user, size=board_size, target=target_size)
+		game = Game(agent, opponent, size=board_size, target=target_size)
 
 		print(f"Game created! $GME (1265) vs. [OUTSIDE TEAM?!?] ({user}) --> gameId: {game.gameId}")
 
 		game.play_game()
 
+	elif game_type == "j":
 
+		agent = Api()
+		opponent = int(input("other team's ID?"))
+
+		game = Game(agent, opponent, size=board_size, target=target_size)
+
+		print(f"Game begun! $GME (1265) vs. [OUTSIDE TEAM?!?] ({user}) --> gameId: {game.gameId}")
+
+		game.play_game()
 
 	else:
+		print("that option doesn't exist yet :'(")
 		# while true check for open games, create a new instance of game play
 		# add instance to collection, list? update each sucessively? 
 		# for instance in instances: instance.check_and_move/report?
