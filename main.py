@@ -51,6 +51,9 @@ def main():
 
 
 	else:
+		# while true check for open games, create a new instance of game play
+		# add instance to collection, list? update each sucessively? 
+		# for instance in instances: instance.check_and_move/report?
 		exit()
 
 

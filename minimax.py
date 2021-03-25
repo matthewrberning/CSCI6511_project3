@@ -1,4 +1,4 @@
-from game import Board
+# from game import Board
 
 c = 0
 def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float("inf")):
@@ -11,6 +11,8 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
     """
     global c
     c+=1
+
+    print("booooard:   ",board)
 
     if board.isEmpty() or board.board[board.middle_point][board.middle_point]:
         return float("inf"), (board.middle_point, board.middle_point)
@@ -139,20 +141,20 @@ def my_min(value1, value2, point1, point2):
         return value1, point1
 
 # test code :)'
-n = 3
-b = Board(n,3)
-symbol = 1
-its = 0
-while 1:
-    its += 1
-    last_point = minimax(b, 2, True)[1]
-    b.add_symbol(last_point, 1 if symbol else -1)
+# n = 3
+# b = Board(n,3)
+# symbol = 1
+# its = 0
+# while 1:
+#     its += 1
+#     last_point = minimax(b, 2, True)[1]
+#     b.add_symbol(last_point, 1 if symbol else -1)
 
-    if b.check_win_con(last_point):
-        print(b)
+#     if b.check_win_con(last_point):
+#         print(b)
 
-        break
+#         break
 
-    symbol = not symbol 
-    print(b)
-print(c, its)
+#     symbol = not symbol 
+#     print(b)
+# print(c, its)

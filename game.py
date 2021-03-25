@@ -4,6 +4,7 @@ from random import randrange
 import math
 import json
 import time
+from minimax import minimax
 
 class Board:
     def __init__(self, size, target) -> None:
@@ -142,7 +143,7 @@ class Game:
         else:
 
             if isinstance(opponent, Api):
-                print("interactive/debug")
+                print("\n[interactive/debug mode - playing with ourselves]\n")
                 self.debug = True
 
             else:
@@ -159,31 +160,47 @@ class Game:
         # while game not done (-1):
         # alternate moves of agents
         # check get_game_state after each move - report win etc.
-
         # main game loop
-        # the team that created the game always has the first move
+        # don't forget: the team that created the game always has the first move
         turn = 0
         # print(self.gameId)
         # print(self.our_agent.tid)
         # print(self.gameId)
 
-        # while self.get_game_state() == -1:
-        while True:
+        game_state = -1
+
+        while game_state == -1:
+        # while True:
 
             if self.debug:
                 #show the board
+                print("\n")
+                print("---BOARD MAP---")
                 self.display_board(self.our_agent, self.gameId)
+                print("\n")
+                print("---NUMPY BOARD---")
+                print(self.board)
 
                 if turn == 0:
                     #agents turn
-                    self.get_move_dummy_agent()
+                    # move = self.get_move_dummy_agent()
+                    move = self.get_move_agent()
                     turn = not turn
+
+                    self.board.add_symbol(move, 1)
+                    game_state = self.get_game_state(0, move)
+                    print("game_state: ", game_state)
+                    
 
                 else:
                     # user's turn
-                    self.get_move_user()
-
+                    move = self.get_move_user()
                     turn = not turn
+
+                    self.board.add_symbol(move, -1)
+                    game_state = self.get_game_state(1, move)
+                    print("game_state: ", game_state)
+                    
 
             else:
                 # if turn == 0:
@@ -191,6 +208,11 @@ class Game:
                 if self.check_for_opponent_moves():
                     print("current board")
                     self.display_board(self.our_agent, self.gameId)
+
+                    #check for game state
+                    # if game still open then play
+
+                    # else report game state (loss/tie)
 
                     print("our agent is playing now...")
                     self.get_move_dummy_agent()
@@ -202,12 +224,14 @@ class Game:
                     time.sleep(6) #sleep 2 seconds
                     continue
 
+        print("GAME OVER! game_state: ", game_state)
+        print("(0 on agent 1 win, 1 on agent 2 win, 2 on tie)")
+        print("\n")
+        print("---FINAL BOARD MAP---")
+        self.display_board(self.our_agent, self.gameId)
+                
 
-            # while move is not made
-                # collect current board state compare to previous state
-                # if the same then sleep 30 seconds and stay in while
-                # if different break while loop - pass to agent
-            # pass
+
         
 
     def get_game_params(self, gameId):
@@ -253,10 +277,48 @@ class Game:
         # list total number of moves made, list total empty spaces
         pass
 
-    def get_move_user(self):
+    def get_move_user(self):    
         #ask user for input, send to api
-        move = input("move? format: (int, int)\nmove: ")
-        self.opponent.make_move(self.gameId, move)
+        status = 0
+        while status == 0:
+            move = input("move? format: int,int\nmove: ")
+            move = move.split(',')
+            if len(move) == 1:
+                print("please use format: int,int")
+                continue
+            elif len(move) > 2:
+                print("please use format: int,int")
+                continue
+            else:
+                try:
+                    move = int(move[0]), int(move[1])
+                except ValueError:
+                    print("please use format: int,int")
+                    continue
+            d = dict(json.loads(self.opponent.make_move(self.gameId, move)))
+
+            if d["code"] == "OK":
+                status = 1
+                return move
+            else:
+                continue
+
+    def get_move_agent(self):
+
+        status = 0
+        while status == 0:
+            move = minimax(self.board, 2, True)[1]
+            print("minimax move: ", move)
+            d = dict(json.loads(self.our_agent.make_move(self.gameId, move)))
+
+            if d["code"] == "OK":
+                status = 1
+                return move
+            else:
+                continue
+
+
+        return move
 
     def get_move_dummy_agent(self):
         # find list of the currently unocupied spaces, choose one at random 
@@ -265,7 +327,9 @@ class Game:
         # print(d)
 
         if not d['output']:
+            #first move is not made so make it in middle of 3x3
             self.our_agent.make_move(self.gameId, (1,1))
+            return (1,1)
 
         else:
             while True:
@@ -275,7 +339,9 @@ class Game:
                 else:
                     print("(dummy) agent's move: ", move)
                     self.our_agent.make_move(self.gameId, move)
-                    break
+                    return move
+    
+
 
     def check_for_opponent_moves(self):
         d = dict(json.loads(self.our_agent.get_moves(self.gameId, 1)))
