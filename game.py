@@ -223,7 +223,7 @@ class Game:
         status = 0
         while status == 0:
             move = minimax(self.board, 3, True)[1]
-            print("minimax move: ", move)
+            print("-------minimax move DEPTH 3, A-B pruning: ", move)
             d = dict(json.loads(self.our_agent.make_move(self.gameId, move)))
 
             if d["code"] == "OK":
@@ -242,7 +242,7 @@ class Game:
         status = 0
         while status == 0:
             move = minimax(self.board, 1, True)[1]
-            print("minimax move: ", move)
+            print("-------minimax move HEURISTIC ONLY: ", move)
             d = dict(json.loads(self.opponent.make_move(self.gameId, move)))
 
             if d["code"] == "OK":

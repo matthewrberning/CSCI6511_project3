@@ -34,19 +34,19 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
             alpha = max(value, alpha)
             board.remove_symbol( (child[0], child[1]) )
 
-            # if beta <= alpha:
-            #     break
+            if beta <= alpha:
+                break
         return value, point
     # minimizer turn
     else:
         value = float("inf")
         for child in children:
-            value, point = my_max( value, minimax( board, depth - 1, not maximizer, (child[0], child[1]),alpha, beta )[0], point, tuple(child) )
-            beta = max(value, beta)
+            value, point = my_min( value, minimax( board, depth - 1, not maximizer, (child[0], child[1]),alpha, beta )[0], point, tuple(child) )
+            beta = min(value, beta)
             board.remove_symbol( (child[0], child[1]) )
 
-            # if beta <= alpha:
-            #     break
+            if beta <= alpha:
+                break
         return value, point
 
 # 0 on agent 1 win, 1 on agent 2 win, 2 on tie, -1 on continuing

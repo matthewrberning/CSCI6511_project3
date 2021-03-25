@@ -44,7 +44,7 @@ def main():
 
 		game = Game(agent, opponent, size=board_size, target=target_size)
 
-		print(f"Game created! $GME (1265) vs. [OUTSIDE TEAM?!?] ({user}) --> gameId: {game.gameId}")
+		print(f"Game created! $GME (1265) vs. [OUTSIDE TEAM?!?] ({opponent}) --> gameId: {game.gameId}")
 
 		game.play_game()
 
@@ -53,9 +53,9 @@ def main():
 		agent = Api()
 		opponent = int(input("other team's ID?"))
 
-		game = Game(agent, opponent, size=board_size, target=target_size)
+		game = Game(agent, opponent, gameId=gameId)
 
-		print(f"Game begun! $GME (1265) vs. [OUTSIDE TEAM?!?] ({user}) --> gameId: {game.gameId}")
+		print(f"Game begun! $GME (1265) vs. [OUTSIDE TEAM?!?] ({opponent}) --> gameId: {game.gameId}")
 
 		game.play_game()
 
