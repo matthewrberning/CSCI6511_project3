@@ -33,7 +33,11 @@ class Board:
         else:
             print("ERROR: Checking for win in unmarked square.")
             exit()
-
+        winner = 0
+        if ans == 1:
+            winner = 0
+        else: 
+            winner = 1
         # check for vertical win
         start_space = [coords[0]-(target-1), coords[1]]
         for i in range(target):
@@ -46,7 +50,7 @@ class Board:
                 else:
                     temp_found = False
                 if (temp_found):
-                    return True, ans
+                    return True, winner
             start_space[0] += 1
 
         # check for horizontal win
@@ -61,7 +65,7 @@ class Board:
                 else: 
                     temp_found = False
                 if (temp_found):
-                    return True, ans
+                    return True, winner
             start_space[1] += 1
         
         # check for diagonal win, negative slope
@@ -76,7 +80,7 @@ class Board:
                 else: 
                     temp_found = False
                 if (temp_found):
-                    return True, ans
+                    return True, winner
             start_space[0] += 1
             start_space[1] += 1
 
@@ -92,9 +96,11 @@ class Board:
                 else: 
                     temp_found = False
                 if (temp_found):
-                    return True, ans
+                    return True, winner
             start_space[0] -= 1
             start_space[1] += 1
+        if self.isFull():
+            return False, 2
         return False, -1
 
     def __str__(self) -> str:
