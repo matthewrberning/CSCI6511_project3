@@ -99,9 +99,22 @@ class Game:
             else:
                 # if turn == 0:
                 # if the check is true then the opponent has made a move, time for ours
-                if self.check_for_opponent_moves()[0]:
-                    # update board
-                    self.board.add_symbol(self.check_for_opponent_moves()[1])
+                if self.check_for_opponent_moves():
+                    # update board happens in check_for_opponent_moves
+                    
+                    print("\n")
+                    print("---CURRENT BOARD MAP---")
+                    self.display_board(self.our_agent, self.gameId)
+                    print("\n")
+                    print("---NUMPY BOARD---")
+                    print(self.board)
+
+
+                    print("our agent is playing now...")
+                    move = self.get_move_agent()
+                    self.board.add_symbol(move, 1)
+                    game_state = self.board.check_win_con(self.target, move)[1]
+                    print("----game_state: ", game_state)
 
                     print("\n")
                     print("---CURRENT BOARD MAP---")
@@ -110,23 +123,22 @@ class Game:
                     print("---NUMPY BOARD---")
                     print(self.board)
 
-                    #check for game state
-                    # if game still open then play
 
                     # else report game state (loss/tie)
 
-                    print("our agent is playing now...")
-                    self.get_move_dummy_agent()
+                    # print("our agent is playing now...")
+                    # self.get_move_dummy_agent()
 
-                    print("new board")
-                    self.display_board(self.our_agent, self.gameId)
+                    # print("new board")
+                    # self.display_board(self.our_agent, self.gameId)
+
 
                 else:
-                    time.sleep(6) #sleep 2 seconds
+                    time.sleep(10) #sleep 2 seconds
                     continue
 
         print("GAME OVER! game_state: ", game_state)
-        print("(0 on agent 1 win, 1 on agent 2 win, 2 on tie)")
+        print("(0 on agent 1 win,\n1 on agent 2 win,\n2 on tie)")
         print("\n")
         print("---FINAL BOARD MAP---")
         self.display_board(self.our_agent, self.gameId)
@@ -256,9 +268,15 @@ class Game:
                 print("something else happened...")
                 print(d)
         elif d["moves"][0]["teamId"] == self.our_agent.tid:
-            return False
+            return False 
         else:
-            return True, (d["moves"][0]["move"].split(',')[0], d["moves"][0]["move"].split(',')[1])
+            move=(int(d["moves"][0]["move"].split(',')[0]), int(d["moves"][0]["move"].split(',')[1]))
+            #update the board
+            self.board.add_symbol(move, -1)
+            return True
+
+
+
 
 
 
