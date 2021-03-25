@@ -70,8 +70,8 @@ class Game:
                 print("---BOARD MAP---")
                 self.display_board(self.our_agent, self.gameId)
                 print("\n")
-                print("---NUMPY BOARD---")
-                print(self.board)
+                # print("---NUMPY BOARD---")
+                # print(self.board)
 
                 if turn == 0:
                     #agents turn
@@ -87,7 +87,8 @@ class Game:
 
                 else:
                     # user's turn
-                    move = self.get_move_user()
+                    # move = self.get_move_user()
+                    move = self.get_move_agent2()
                     turn = not turn
 
                     self.board.add_symbol(move, -1)
@@ -221,7 +222,7 @@ class Game:
 
         status = 0
         while status == 0:
-            move = minimax(self.board, 4, True)[1]
+            move = minimax(self.board, 3, True)[1]
             print("minimax move: ", move)
             d = dict(json.loads(self.our_agent.make_move(self.gameId, move)))
 
@@ -233,6 +234,26 @@ class Game:
 
 
         return move
+
+
+
+    def get_move_agent2(self):
+
+        status = 0
+        while status == 0:
+            move = minimax(self.board, 1, True)[1]
+            print("minimax move: ", move)
+            d = dict(json.loads(self.opponent.make_move(self.gameId, move)))
+
+            if d["code"] == "OK":
+                status = 1
+                return move
+            else:
+                continue
+
+
+        return move
+
 
     def get_move_dummy_agent(self):
         # find list of the currently unocupied spaces, choose one at random 
