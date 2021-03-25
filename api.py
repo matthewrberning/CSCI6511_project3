@@ -114,6 +114,7 @@ class Api:
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
+        return data.decode("utf-8")
 
     def make_move(self, gameId, move):
         conn = http.client.HTTPSConnection("www.notexponential.com")
@@ -160,6 +161,8 @@ class Api:
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
+
+        return data.decode("utf-8")
 
     def get_moves(self, gameId, count):
         conn = http.client.HTTPSConnection("www.notexponential.com")
