@@ -50,7 +50,7 @@ class Api:
         dataList.append('Content-Type: {}'.format('multipart/form-data'))
         dataList.append('')
 
-        dataList.append(str(team2.tid))
+        dataList.append(str(team2))
         dataList.append('--' + boundary)
         dataList.append('Content-Disposition: form-data; name=gameType;')
 
@@ -114,6 +114,7 @@ class Api:
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
+        return data.decode("utf-8")
 
     def make_move(self, gameId, move):
         conn = http.client.HTTPSConnection("www.notexponential.com")
@@ -132,7 +133,7 @@ class Api:
         dataList.append('Content-Type: {}'.format('multipart/form-data'))
         dataList.append('')
 
-        dataList.append(gameId)
+        dataList.append(str(gameId))
         dataList.append('--' + boundary)
         dataList.append('Content-Disposition: form-data; name=teamId;')
 
@@ -161,6 +162,8 @@ class Api:
         data = res.read()
         print(data.decode("utf-8"))
 
+        return data.decode("utf-8")
+
     def get_moves(self, gameId, count):
         conn = http.client.HTTPSConnection("www.notexponential.com")
         boundary = ''
@@ -174,6 +177,7 @@ class Api:
         res = conn.getresponse()
         data = res.read()
         print(data.decode("utf-8"))
+        return data.decode("utf-8")
 
     def get_board_string(self, gameId):
         conn = http.client.HTTPSConnection("www.notexponential.com")
@@ -185,7 +189,10 @@ class Api:
         conn.request("GET", "/aip2pgaming/api/index.php?type=boardString&gameId={}".format(gameId), payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+        # print(data.decode("utf-8"))
+
+        ret = json.loads(data.decode("utf-8"))
+        return ret
 
     def get_board_map(self, gameId):
         conn = http.client.HTTPSConnection("www.notexponential.com")
@@ -197,8 +204,5 @@ class Api:
         conn.request("GET", "/aip2pgaming/api/index.php?type=boardMap&gameId={}".format(gameId), payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+        # print(data.decode("utf-8"))
         return data.decode("utf-8")
-
-x = Api()
-x.get_games()
