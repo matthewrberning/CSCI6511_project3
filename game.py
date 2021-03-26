@@ -4,6 +4,8 @@ from random import randrange
 import json
 import time
 from minimax import minimax
+from minimax import minimax2
+
 from board import Board
 
 
@@ -222,7 +224,7 @@ class Game:
 
         status = 0
         while status == 0:
-            move = minimax(self.board, 3, True)[1]
+            move = minimax2(self.board, 1, True)[1]
             print("-------minimax move DEPTH 3, A-B pruning: ", move)
             d = dict(json.loads(self.our_agent.make_move(self.gameId, move)))
 
@@ -241,7 +243,7 @@ class Game:
 
         status = 0
         while status == 0:
-            move = minimax(self.board, 1, True)[1]
+            move = minimax2(self.board, 3, True)[1]
             print("-------minimax move HEURISTIC ONLY: ", move)
             d = dict(json.loads(self.opponent.make_move(self.gameId, move)))
 
