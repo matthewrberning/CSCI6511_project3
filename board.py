@@ -5,15 +5,18 @@ class Board:
         self.total_spaces = size**2
         self.dim = size
         self.target = target
+        self.middle = size // 2
         self.board =  np.zeros( (size, size), dtype=np.int8 )
     
     def get_open_spaces(self):
         """Return the possible next moves""" 
         return np.argwhere(self.board == 0)
-
+        
     def isFull(self):
         return True if np.count_nonzero(self.board) == self.total_spaces else False
 
+    def isEmpty(self):
+        return True if np.count_nonzero(self.board) == 0 else False
     def add_symbol(self, point, symbol):
         """point is a int tuple (x,y), symbol 1 or 0"""
         self.board[point[0]][point[1]] = symbol

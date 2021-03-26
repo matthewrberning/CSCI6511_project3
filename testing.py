@@ -13,7 +13,7 @@ def main():
 		board_size = 3+i
 		
 		if i > 3:
-			target_size = 3+i-random.randint(1,2)
+			target_size = 3+i - random.randint(1,3)
 		else:
 			target_size = 3
 

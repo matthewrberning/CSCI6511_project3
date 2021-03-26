@@ -12,7 +12,7 @@ class Game:
         self.our_agent = our_agent #our agent GME teamId: 1265
         self.opponent = opponent #either an instance of Api class (mellon) or an int(teamId) for opponent team
 
-        self.first_move = first_move #do we need this? the first move always goes to the starting team
+        self.first_move = first_move #do dwe need this? the first move always goes to the starting team
 
 
         # game not created

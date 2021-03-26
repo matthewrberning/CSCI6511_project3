@@ -1,6 +1,5 @@
 from board import Board
 
-c = 0
 def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float("inf")):
     """
     minimax algorithm to find most optimal move in a game of TTT.
@@ -9,12 +8,12 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
     maximizer- if it is the maximizers turn
     point- should be none on initial call. the tentative point to add to the board
     """
-    global c
-    c+=1
-    
     # add the tentative point to the board(currently just used to close off spaces)
     # but can be encorporated into a heuristic based on which agent has chosen a space
-    if point: # on all other calls    
+    if point: #p on all other calls    
+        # check if point is a win with either symbol
+        # if its a win return the point, and inf
+            
         board.add_symbol( (point[0], point[1]), 1 if maximizer else -1)
     else: # first call
         point = (0,0)
@@ -30,8 +29,10 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
     if maximizer:
         value = float("-inf")
         for child in children:
-            value, point = my_max( value, minimax( board, depth - 1, not maximizer, (child[0], child[1]), alpha, beta )[0], point, tuple(child) )
+            value, point = my_max( value, minimax( board, depth - 1, False, (child[0], child[1]), alpha, beta )[0], point, tuple(child), board, maximizer)
+            
             alpha = max(value, alpha)
+
             board.remove_symbol( (child[0], child[1]) )
 
             if beta <= alpha:
@@ -41,8 +42,10 @@ def minimax(board, depth, maximizer, point=None, alpha=float("-inf"), beta=float
     else:
         value = float("inf")
         for child in children:
-            value, point = my_min( value, minimax( board, depth - 1, not maximizer, (child[0], child[1]),alpha, beta )[0], point, tuple(child) )
+            value, point = my_min( value, minimax( board, depth - 1, True, (child[0], child[1]),alpha, beta )[0], point, tuple(child))
+            
             beta = min(value, beta)
+
             board.remove_symbol( (child[0], child[1]) )
 
             if beta <= alpha:
@@ -247,8 +250,20 @@ def heuristic(board_obj, coords):
 
     return max_util+(multiplier/(multiplier+1))
 
+def my_max(value1, value2, point1, point2, board, maximizer):
+    # board.add_symbol(point1, -1 if maximizer else 1)
+    # if board.check_win_con(board.target, point1):
+    #     board.remove_symbol(point1)
+    #     return value1, point1
+    # board.remove_symbol(point1)
+    
+    
+    # board.add_symbol(point2, -1 if maximizer else 1)
+    # if board.check_win_con(board.target, point2):
+    #     board.remove_symbol(point2)
+    #     return value2, point2
 
-def my_max(value1, value2, point1, point2):
+    board.remove_symbol(point2)
     if value2 > value1:
         return value2, point2
     else:
