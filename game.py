@@ -157,12 +157,10 @@ class Game:
         print("---FINAL BOARD MAP---")
         self.display_board(self.our_agent, self.gameId)
                 
-
-
         
 
     def get_game_params(self, gameId):
-        b = self.our_agent.get_board_string(gameId)
+        b = json.loads(self.our_agent.get_board_string(gameId))
 
         one_row = b['output'].split("\n")
         t = int(b['target'])
@@ -194,7 +192,7 @@ class Game:
         display the board
         '''
 
-        for line in agent.get_board_string(gameId)["output"].split("\n"):
+        for line in json.loads(agent.get_board_string(gameId))["output"].split("\n"):
             if line != '':
                 line_map = "|"
 
@@ -232,43 +230,34 @@ class Game:
                 continue
 
     def get_move_agent(self):
+        """
+        uses the current numpy representation of the board (created in init)
+        passes board to minimax agent
+        uses while loop to monitor API for move submission
+
+        """
+
+        #pass board to minimax agent and receive move back
+        move = minimax(self.board, 1, True)[1]
 
         status = 0
         while status == 0:
-            move = minimax(self.board, 1, True)[1]
-            # print("-------minimax move DEPTH 3, A-B pruning: ", move)
+
+            #supply move coords to the API
             d = dict(json.loads(self.our_agent.make_move(self.gameId, move)))
 
+            #check that move was sccesfully passed to the API, otherwise try again
             if d["code"] == "OK":
                 status = 1
                 return move
             else:
                 continue
 
-
         return move
 
 
-
-    # def get_move_agent2(self):
-
-    #     status = 0
-    #     while status == 0:
-    #         move = minimax(self.board, 1, True)[1]
-    #         print("-------minimax move HEURISTIC ONLY: ", move)
-    #         d = dict(json.loads(self.opponent.make_move(self.gameId, move)))
-
-    #         if d["code"] == "OK":
-    #             status = 1
-    #             return move
-    #         else:
-    #             continue
-
-
-    #     return move
-
-
     def get_move_dummy_agent(self):
+
         # find list of the currently unocupied spaces, choose one at random 
         # send move to api
         d = dict(json.loads(self.our_agent.get_board_map(self.gameId)))

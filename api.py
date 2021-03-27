@@ -84,7 +84,8 @@ class Api:
         conn.request("POST", "/aip2pgaming/api/index.php", payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+
+        # print(data.decode("utf-8"))
 
         ret = json.loads(data.decode("utf-8"))['gameId']
         return ret
@@ -100,7 +101,7 @@ class Api:
         res = conn.getresponse()
         data = res.read()
         data = data.decode("utf-8")
-        print(data)
+        # print(data)
         return data
 
     def get_open_games(self):
@@ -113,7 +114,7 @@ class Api:
         conn.request("GET", "/aip2pgaming/api/index.php?type=myOpenGames", payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+        # print(data.decode("utf-8"))
         return data.decode("utf-8")
 
     def make_move(self, gameId, move):
@@ -160,7 +161,8 @@ class Api:
         conn.request("POST", "/aip2pgaming/api/index.php", payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+
+        # print("\n",data.decode("utf-8"))
 
         return data.decode("utf-8")
 
@@ -176,7 +178,7 @@ class Api:
         conn.request("GET", "/aip2pgaming/api/index.php?type=moves&gameId={}&count={}".format(gameId, count), payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+        # print(data.decode("utf-8"))
         return data.decode("utf-8")
 
     def get_board_string(self, gameId):
@@ -191,8 +193,10 @@ class Api:
         data = res.read()
         # print(data.decode("utf-8"))
 
-        ret = json.loads(data.decode("utf-8"))
-        return ret
+        # ret = json.loads(data.decode("utf-8"))
+        # return ret
+
+        return data.decode("utf-8")
 
     def get_board_map(self, gameId):
         conn = http.client.HTTPSConnection("www.notexponential.com")
