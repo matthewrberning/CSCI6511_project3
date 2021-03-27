@@ -11,13 +11,12 @@ class Game:
     def __init__(self, our_agent, opponent, size=3, target=3, first_move=True, gameId=None) -> None:
         self.our_agent = our_agent #our agent GME teamId: 1265
         self.opponent = opponent #either an instance of Api class (mellon) or an int(teamId) for opponent team
-
         self.first_move = first_move #do dwe need this? the first move always goes to the starting team
 
-
-        # game not created
+        # game doesnot already exist
         if not gameId:
 
+            #check if the opponent is an instance of the Api class -we're debugging
             if isinstance(opponent, Api):
                 #creating a new game with interactive play
                 print("\n[interactive/debug mode - playing with ourselves]\n")
@@ -28,22 +27,27 @@ class Game:
                 self.debug = False
                 self.gameId = our_agent.create_game(opponent, size, target)
 
-            
+            #set up the game params
             self.size, self.target = size, target
 
-        # game created
+        # game already exists 
         else:
 
+            #check if the opponent is an instance of the Api class -we're debugging
             if isinstance(opponent, Api):
+                #continuing a debugging game
                 print("\n[interactive/debug mode - playing with ourselves]\n")
                 self.debug = True
 
             else:
+                #playing an outside opponent 
                 self.debug = False
 
+            #set up the game params
             self.size, self.target = self.get_game_params(gameId)
             self.gameId = gameId
         
+        #init the numpy board
         self.board = Board(self.size, self.target)
         
         
@@ -135,6 +139,7 @@ class Game:
                     move = self.get_move_agent()
                     self.board.add_symbol(move, 1)
 
+                    #check for win conditions after our agent plays
                     game_state = self.board.check_win_con(self.target, move)[1]
                     print("\n-------game_state after agent's move: ", game_state)
 
@@ -200,6 +205,7 @@ class Game:
     def get_move_user(self):    
         """
         collects input from a human and posts to board using the API
+        returns the user's move
         """
         status = 0
         while status == 0:
@@ -236,6 +242,7 @@ class Game:
         uses the current numpy representation of the board (created in init)
         passes board to minimax agent
         uses while loop to monitor API for move submission
+        returns the move coords
         """
         #pass board to minimax agent and receive move back
         move = minimax(self.board, 1, True)[1]
@@ -257,11 +264,13 @@ class Game:
 
 
     def get_move_dummy_agent(self):
-
-        # find list of the currently unocupied spaces, choose one at random 
-        # send move to api
+        """
+        randomly playing agent
+        finds list of the currently unocupied spaces, chooses one at random 
+        returns dummy move
+        """
+        #collect board state from API
         d = dict(json.loads(self.our_agent.get_board_map(self.gameId)))
-        # print(d)
 
         if not d['output']:
             #first move is not made so make it in middle of 3x3
@@ -270,10 +279,12 @@ class Game:
 
         else:
             while True:
+                #find a move that is available
                 move = (randrange(self.size), randrange(self.size))
                 if f"{move[0]},{move[1]}" in d['output']:
                     continue
                 else:
+                    #open space identified, post it to API
                     print("(dummy) agent's move: ", move)
                     self.our_agent.make_move(self.gameId, move)
                     return move
@@ -281,11 +292,16 @@ class Game:
 
 
     def check_for_opponent_moves(self, who_starts):
+        """
+        check on API and find if our opponent has made any moves
+        returns true if a move by our agent needs to be made
+        returns false if we're still waiting for the opponent
+        """
 
         #collect list of moves from API
         d = dict(json.loads(self.our_agent.get_moves(self.gameId, 1)))
 
-
+        #check for API reporting a failure when there are no moves yet made
         if d["code"] == "FAIL":
             if d["message"] == "No moves" and who_starts=="us":
                 #we need to make the first move

@@ -100,9 +100,8 @@ class Api:
         conn.request("GET", "/aip2pgaming/api/index.php?type=myGames", payload, headers)
         res = conn.getresponse()
         data = res.read()
-        data = data.decode("utf-8")
-        # print(data)
-        return data
+        # print(data.decode("utf-8"))
+        return data.decode("utf-8")
 
     def get_open_games(self):
         conn = http.client.HTTPSConnection("www.notexponential.com")
@@ -161,9 +160,7 @@ class Api:
         conn.request("POST", "/aip2pgaming/api/index.php", payload, headers)
         res = conn.getresponse()
         data = res.read()
-
         # print("\n",data.decode("utf-8"))
-
         return data.decode("utf-8")
 
     def get_moves(self, gameId, count):
@@ -192,10 +189,6 @@ class Api:
         res = conn.getresponse()
         data = res.read()
         # print(data.decode("utf-8"))
-
-        # ret = json.loads(data.decode("utf-8"))
-        # return ret
-
         return data.decode("utf-8")
 
     def get_board_map(self, gameId):
