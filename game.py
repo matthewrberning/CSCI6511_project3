@@ -49,20 +49,22 @@ class Game:
         
         
     def play_game(self, who_starts="us"):
-        # while game not done (-1):
-        # alternate moves of agents
-        # check get_game_state after each move - report win etc.
-        # main game loop
-        # don't forget: the team that created the game always has the first move
-        turn = 0
-        # print(self.gameId)
-        # print(self.our_agent.tid)
-        # print(self.gameId)
+        """
+        main game loop, alternates turns between user and agent
+        or listens for moves in API and plays our agent against opponents there
+        don't forget: the team that created the game always has the first move
+        """
 
+        #init turn based upon who is creating the game
+        if who_starts == "us":
+            turn = 0
+        else:
+            turn = 1
+
+        #init game state (game is continuing on -1, else is won or tied)
         game_state = -1
 
         while game_state == -1:
-        # while True:
 
             if self.debug:
                 #show the board
@@ -75,33 +77,40 @@ class Game:
 
                 if turn == 0:
                     #agents turn
-                    # move = self.get_move_dummy_agent()
+                    # move = self.get_move_dummy_agent() #debug/testing agent makes random moves
                     move = self.get_move_agent()
-                    turn = not turn
 
+                    #pass the turn to the next player
+                    turn = not turn 
+
+                    #update the numpy representation of the board
                     self.board.add_symbol(move, 1)
-                    # game_state = get_game_state(self.board, self.target, move)
+
+                    #check on the status of the game
                     game_state = self.board.check_win_con(self.target, move)[1]
-                    print("----game_state: ", game_state)
+
+                    print("\n-------game_state: ", game_state)
                     
 
                 else:
                     # user's turn
                     move = self.get_move_user()
-                    # move = self.get_move_agent2()
+
+                    #pass the turn to the next player
                     turn = not turn
 
+                    #update the numpy representation of the board
                     self.board.add_symbol(move, -1)
-                    # game_state = get_game_state(self.board, self.target, move)
-                    game_state = self.board.check_win_con(self.target, move)[1]
-                    print("----game_state: ", game_state)
                     
+                    #update current game state
+                    game_state = self.board.check_win_con(self.target, move)[1]
 
+                    print("\n-------game_state: ", game_state)
+                    
             else:
-                # if turn == 0:
                 # if the check is true then the opponent has made a move, time for ours
                 if self.check_for_opponent_moves(who_starts=who_starts):
-                    # update board happens in check_for_opponent_moves
+                    # update of numpy board happens in check_for_opponent_moves
                     
                     print("\n")
                     print("---CURRENT BOARD MAP---")
@@ -110,13 +119,12 @@ class Game:
                     print("---NUMPY BOARD---")
                     print(self.board)
 
-                    #check the board after their move for win conditions
-
+                    #check the board after their move for win condition
                     d = dict(json.loads(self.our_agent.get_moves(self.gameId, 1)))
                     move=(int(d["moves"][0]["move"].split(',')[0]), int(d["moves"][0]["move"].split(',')[1]))
 
                     game_state = self.board.check_win_con(self.target, move)[1]
-                    print("----game_state after opponent's move: ", game_state)
+                    print("\n-------game_state after opponent's move: ", game_state)
                     
                     #if they win/tie on that turn exit the while loop
                     if game_state != -1:
@@ -128,7 +136,7 @@ class Game:
                     self.board.add_symbol(move, 1)
 
                     game_state = self.board.check_win_con(self.target, move)[1]
-                    print("----game_state: ", game_state)
+                    print("\n-------game_state after agent's move: ", game_state)
 
                     print("\n")
                     print("---CURRENT BOARD MAP---")
@@ -138,28 +146,26 @@ class Game:
                     print(self.board)
 
 
-                    # else report game state (loss/tie)
-
-                    # print("our agent is playing now...")
-                    # self.get_move_dummy_agent()
-
-                    # print("new board")
-                    # self.display_board(self.our_agent, self.gameId)
-
-
                 else:
-                    time.sleep(10) #sleep 2 seconds
+                    #sleep befor making another API request to check for new moves
+                    time.sleep(10)
                     continue
 
-        print("GAME OVER! game_state: ", game_state)
-        print("(0 on agent 1 win,\n1 on agent 2 win,\n2 on tie)")
+        print("\n\n\nGAME OVER! game_state: ", game_state)
+        print("->  0 on minimax agent win\n->  1 on opponent(or user) win\n->  2 on tie")
         print("\n")
         print("---FINAL BOARD MAP---")
         self.display_board(self.our_agent, self.gameId)
-                
+        print("---FINAL NUMPY BOARD---")
+        print(self.board)
+    
         
 
     def get_game_params(self, gameId):
+        """
+        collects the board string of a gameId from the API 
+        returns the target and the board size
+        """
         b = json.loads(self.our_agent.get_board_string(gameId))
 
         one_row = b['output'].split("\n")
@@ -167,30 +173,18 @@ class Game:
         return len(one_row[0]), t
 
 
-    
-    def get_game_state(self, last_to_move, point):
-        """
-        0 on agent 1 win, 1 on agent 2 win, 2 on tie, -1 on continuing. Only have to check the last move!
-        last_to_move is the agent that last played, using the enumeration above. So, on a win, return the agent 
-        identifier, otherwise check for a tie, or keep playing
-        """
-        # request board state
-        # use opposite player !self.to_move...
-
-        print(self.board)
-        
-        if self.board.check_win_con(point):
-            return last_to_move
-        elif self.board.isFull():
-            return 2
-        return -1
-
-
 
     def display_board(self, agent, gameId):
-        '''
-        display the board
-        '''
+        """
+        display the board as an ASCII representation
+        ex: 
+        ------
+        |X|O|X|
+        ------
+        |-|O|X|
+        ------
+        |O|X|O|
+        """
 
         for line in json.loads(agent.get_board_string(gameId))["output"].split("\n"):
             if line != '':
@@ -204,10 +198,15 @@ class Game:
                 continue
 
     def get_move_user(self):    
-        #ask user for input, send to api
+        """
+        collects input from a human and posts to board using the API
+        """
         status = 0
         while status == 0:
+            #ask for move
             move = input("\nmove? format: int,int\nmove: ")
+
+            #perform some validation of the input
             move = move.split(',')
             if len(move) == 1:
                 print("please use format: int,int")
@@ -221,8 +220,11 @@ class Game:
                 except ValueError:
                     print("please use format: int,int")
                     continue
+
+            #move posted to api
             d = dict(json.loads(self.opponent.make_move(self.gameId, move)))
 
+            #check that move was sccesfully passed to the API, otherwise try again
             if d["code"] == "OK":
                 status = 1
                 return move
@@ -234,9 +236,7 @@ class Game:
         uses the current numpy representation of the board (created in init)
         passes board to minimax agent
         uses while loop to monitor API for move submission
-
         """
-
         #pass board to minimax agent and receive move back
         move = minimax(self.board, 1, True)[1]
 
@@ -281,7 +281,10 @@ class Game:
 
 
     def check_for_opponent_moves(self, who_starts):
+
+        #collect list of moves from API
         d = dict(json.loads(self.our_agent.get_moves(self.gameId, 1)))
+
 
         if d["code"] == "FAIL":
             if d["message"] == "No moves" and who_starts=="us":
@@ -291,14 +294,22 @@ class Game:
                 #we need to wait for them to move
                 return False
             else:
+                #this happens if the game is no longer open
                 print("something else happened...")
                 print(d)
+                exit()
+
+        #check if our team was the last one to move
         elif d["moves"][0]["teamId"] == self.our_agent.tid:
-            return False 
+            return False
+
+        #the opponent just moved
         else:
             move=(int(d["moves"][0]["move"].split(',')[0]), int(d["moves"][0]["move"].split(',')[1]))
-            #update the board
+            
+            #update the numpy board
             self.board.add_symbol(move, -1)
+
             return True
 
 
