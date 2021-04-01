@@ -3,7 +3,7 @@ import numpy as np
 from random import randrange
 import json
 import time
-from minimax import minimax
+from minimax import get_best_move
 from board import Board
 
 
@@ -245,8 +245,9 @@ class Game:
         returns the move coords
         """
         #pass board to minimax agent and receive move back
-        move = minimax(self.board, 1, True)[1]
-
+        # move = minimax(self.board, 1, True)[1]
+        move = get_best_move(self.board, 4, True)
+        
         status = 0
         while status == 0:
 
