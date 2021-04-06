@@ -246,7 +246,7 @@ class Game:
         """
         #pass board to minimax agent and receive move back
         # move = minimax(self.board, 1, True)[1]
-        move = get_best_move(self.board, 4, True)
+        move = get_best_move(self.board, 3, True)
         
         status = 0
         while status == 0:

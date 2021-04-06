@@ -2,7 +2,7 @@ from board import Board
 import numpy as np
 import math
 
-def get_best_move(board, depth, maximizer):
+def get_best_move(board, depth, maximizer, symbol):
     children = sorted(board.get_open_spaces(), key=lambda x: space_sort(board, x, maximizer), reverse=True)
 
     best_move = None
@@ -12,10 +12,10 @@ def get_best_move(board, depth, maximizer):
         return board.middle,board.middle
         
     for idx, child in enumerate(children):
-        board.add_symbol(child, 1 if maximizer else -1)
+        board.add_symbol(child, 1)
 
         
-        minimax_result = minimax(board, depth, False)
+        minimax_result = minimax(board, depth, False, symbol=1)
 
         board.remove_symbol(child)
 
@@ -24,7 +24,7 @@ def get_best_move(board, depth, maximizer):
             best_move = child
     return best_move
 
-def minimax(board, depth, maximizer, alpha=float("-inf"), beta=float("inf"), point=None):
+def minimax(board, depth, maximizer, symbol, alpha=float("-inf"), beta=float("inf"), point=None):
     """
     minimax algorithm to find most optimal move in a game of TTT.
     board- the game board you are playing on
@@ -39,7 +39,7 @@ def minimax(board, depth, maximizer, alpha=float("-inf"), beta=float("inf"), poi
     # if depth == 0 or board.isFull():
     #     # return heuristic(board, maximizer, depth), point
     #     return abs(heuristic(board, point, maximizer)), point
-    h = heuristic(board)
+    h = heuristic(board, maximizer, symbol)
     if abs(h) == board.total_spaces or depth==0:
         return h
 
@@ -55,7 +55,7 @@ def minimax(board, depth, maximizer, alpha=float("-inf"), beta=float("inf"), poi
         value = float("-inf")
         for child in children:
             board.add_symbol(child, 1)
-            value = max(minimax( board, depth - 1, not maximizer, alpha, beta, point=child), value)
+            value = max(minimax( board, depth - 1, not maximizer, -1, alpha, beta, point=child), value)
             board.remove_symbol(child)
             
             alpha = max(value, alpha)
@@ -68,7 +68,7 @@ def minimax(board, depth, maximizer, alpha=float("-inf"), beta=float("inf"), poi
         value = float("inf")
         for child in children:
             board.add_symbol(child, -1)
-            value = min(minimax( board, depth - 1, not maximizer, alpha, beta, point=child), value)
+            value = min(minimax( board, depth - 1, not maximizer, 1, alpha, beta, point=child), value)
             board.remove_symbol(child)
 
             beta = min(value, beta)
@@ -78,27 +78,21 @@ def minimax(board, depth, maximizer, alpha=float("-inf"), beta=float("inf"), poi
             
         return value
 
-def heuristic(board_obj):
-    n = board_obj.dim; t = board_obj.target
-    board = board_obj.board
-    for i in range(n):
-        row = board[i]
-        col = board[:, i]
-        if np.count_nonzero(row == 1) == t-1 : 
-            return board_obj.total_spaces
-        elif np.count_nonzero(row == -1) == t-1:
-            return -board_obj.total_spaces
-        if np.count_nonzero(col == 1) == t-1 : 
-            return board_obj.total_spaces
-        elif np.count_nonzero(col == -1) == t-1:
-            return -board_obj.total_spaces
-    #Todo diagonals
-    return 0
+def heuristic(board_obj, maximizer, symbol):
+    for i in range(board_obj.dim):
+        for j in range(board_obj.dim):
+            board_obj.add_symbol((i,j), symbol)
+            if board_obj.check_win_con(board_obj.target, (i,j)):
+                board_obj.remove_symbol((i,j))
+                return 10 if maximizer else -10
+            board_obj.remove_symbol((i,j))
+            
+    return 0  
         
 # 0 on agent 1 win, 1 on agent 2 win, 2 on tie, -1 on continuing
 # agent 1 will be represented by 1's, agent 2 will be -1's
 # @param coords: the coordinates of the most recently placed mark, represented as a 1x2 np arr
-def space_sort(board_obj, coords, maximizer):
+def space_sort(board_obj, coords, symbol):
     target = board_obj.target
     board = board_obj.board
     # use the coords of the last turn to determine if we are looking for 1 or -1

@@ -86,17 +86,17 @@ def check_win_con(coords, board, target):
 ##################################
 ##################################
 
-size = 8
-t = 5
+size = 3
+t = 3
 b = Board(size, t)
 from minimax import get_best_move
 while 1:
     # human turn
     print("Human turn:")
     # __, _, point = minimax(b, 1, True)
-    # inp = input("Enter point xy: ")
-    # point = (int(inp[0]), int(inp[1]))
-    point = get_best_move(b,3, False)
+    inp = input("Enter point xy: ")
+    point = (int(inp[0]), int(inp[1]))
+    # point = get_best_move(b,3, False)
     b.add_symbol(point, -1)
     if (check_win_con(point, b.board, t)):
         print(b.board)
@@ -118,7 +118,7 @@ while 1:
     #                 best = [i, j]
     #                 curr_max = v
     #             b.board[i][j] = 0
-    point = get_best_move(b,1, True)
+    point = get_best_move(b,4, True)
     b.add_symbol(point, 1)
     if (check_win_con(point, b.board, t)):
         print(b.board)
